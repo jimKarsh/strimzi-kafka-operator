@@ -13,18 +13,27 @@ spec:
         type: "topic"
         name: "my-topic"
         patternType: "prefix"
-      operation: "Read"
+      operations:
+      - "Read"
+      - "Write"
+      - "Describe"
     - resource:
         type: "topic"
         name: "my"
         patternType: "prefix"
       host: "127.0.0.1"
-      operation: "Read"
+      operations:
+      - "Read"
+      - "Write"
     - resource:
         type: "group"
         name: "my-group"
       host: "127.0.0.1"
-      operation: "Read"
+      operations:
+      - "Read"
+      - "Write"
+      - "Describe"
     - resource:
         type: "cluster"
-      operation: "Read"
+      operations:
+      - "Read"
