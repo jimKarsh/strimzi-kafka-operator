@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
@@ -176,7 +177,7 @@ public class MockKube2ControllersTest {
 
         List<Pod> pods = client.pods().inNamespace(NAMESPACE).withLabels(Map.of("app", "my-sts")).list().getItems();
         assertThat(pods.size(), is(3));
-        assertThat(pods.stream().map(pod -> pod.getMetadata().getName()).collect(Collectors.toList()), is(List.of("my-sts-0", "my-sts-1", "my-sts-2")));
+        assertThat(pods.stream().map(pod -> pod.getMetadata().getName()).collect(Collectors.toList()), contains("my-sts-0", "my-sts-1", "my-sts-2"));
         for (Pod pod : pods)    {
             assertThat(pod.getMetadata().getName(), startsWith(statefulSetName + "-"));
             assertThat(pod.getSpec().getContainers().size(), is(1));
@@ -189,13 +190,13 @@ public class MockKube2ControllersTest {
 
         pods = client.pods().inNamespace(NAMESPACE).withLabels(Map.of("app", "my-sts")).list().getItems();
         assertThat(pods.size(), is(5));
-        assertThat(pods.stream().map(pod -> pod.getMetadata().getName()).collect(Collectors.toList()), is(List.of("my-sts-0", "my-sts-1", "my-sts-2", "my-sts-3", "my-sts-4")));
+        assertThat(pods.stream().map(pod -> pod.getMetadata().getName()).collect(Collectors.toList()), contains("my-sts-0", "my-sts-1", "my-sts-2", "my-sts-3", "my-sts-4"));
 
         // Scale-down
         client.apps().statefulSets().inNamespace(NAMESPACE).withName(statefulSetName).scale(2, true);
 
         pods = client.pods().inNamespace(NAMESPACE).withLabels(Map.of("app", "my-sts")).list().getItems();
         assertThat(pods.size(), is(2));
-        assertThat(pods.stream().map(pod -> pod.getMetadata().getName()).collect(Collectors.toList()), is(List.of("my-sts-0", "my-sts-1")));
+        assertThat(pods.stream().map(pod -> pod.getMetadata().getName()).collect(Collectors.toList()), contains("my-sts-0", "my-sts-1"));
     }
 }
