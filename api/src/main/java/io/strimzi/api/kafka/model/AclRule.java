@@ -47,11 +47,6 @@ public class AclRule implements UnknownPropertyPreserving, Serializable {
     public AclRule() {
     }
 
-//    public AclRule(AclRuleType type, AclRuleResource resource, String host, AclOperation operation) {
-//        this(type, resource, host, List.of(operation));
-//        this.operation = operation;
-//    }
-
     public AclRule(AclRuleType type, AclRuleResource resource, String host, List<AclOperation> operations) {
         this.type = type;
         this.resource = resource;
@@ -117,7 +112,6 @@ public class AclRule implements UnknownPropertyPreserving, Serializable {
             "Supported operations are: Read, Write, Create, Delete, Alter, Describe, ClusterAction, AlterConfigs, DescribeConfigs, IdempotentWrite and All.")
     public List<AclOperation> getOperations() {
         return this.operations.isEmpty() ? List.of() : List.copyOf(EnumSet.copyOf(this.operations));
-//        return this.operations.stream().distinct().sorted(AclOperation::compareTo).collect(Collectors.toUnmodifiableList());
     }
 
     public void setOperations(List<AclOperation> operations) {
