@@ -14,6 +14,9 @@ import org.apache.kafka.common.acl.AclPermissionType;
 import org.apache.kafka.common.resource.ResourcePattern;
 import org.apache.kafka.common.security.auth.KafkaPrincipal;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Immutable class which represents a single ACL rule for AclAuthorizer.
  * The main reason for not using directly the classes from the api module is that we need immutable objects for use in Sets.
@@ -27,10 +30,10 @@ public class SimpleAclRule {
     /**
      * Constructor
      *
-     * @param type          Type of the Acl rule (Allow or Deny)
-     * @param resource      The resource to which this rule applies (Topic, Group, Cluster, ...)
-     * @param host          The host from which is this rule allowed / denied
-     * @param operation     The Operation which is allowed or denied
+     * @param type      Type of the Acl rule (Allow or Deny)
+     * @param resource  The resource to which this rule applies (Topic, Group, Cluster, ...)
+     * @param host      The host from which is this rule allowed / denied
+     * @param operation The Operation which is allowed or denied
      */
     public SimpleAclRule(AclRuleType type, SimpleAclRuleResource resource, String host, AclOperation operation) {
         this.type = type;
@@ -135,11 +138,11 @@ public class SimpleAclRule {
     /**
      * Creates SimpleAclRule object based on AclRule object which is received as part ofthe KafkaUser CRD.
      *
-     * @param rule  AclRule object from KafkaUser CR
+     * @param rule AclRule object from KafkaUser CR
      * @return The SimpleAclRule.
      */
-    public static SimpleAclRule fromCrd(AclRule rule)   {
-        return new SimpleAclRule(rule.getType(), SimpleAclRuleResource.fromCrd(rule.getResource()), rule.getHost(), rule.getOperation());
+    public static List<SimpleAclRule> fromCrd(AclRule rule) {
+        return rule.getOperations().stream().map((aclOperation) -> new SimpleAclRule(rule.getType(), SimpleAclRuleResource.fromCrd(rule.getResource()), rule.getHost(), aclOperation)).collect(Collectors.toUnmodifiableList());
     }
 
     private AclPermissionType toKafkaAclPermissionType(AclRuleType aclRuleType) {

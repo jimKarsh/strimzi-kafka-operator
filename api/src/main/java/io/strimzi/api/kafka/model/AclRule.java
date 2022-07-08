@@ -47,10 +47,10 @@ public class AclRule implements UnknownPropertyPreserving, Serializable {
     public AclRule() {
     }
 
-    public AclRule(AclRuleType type, AclRuleResource resource, String host, AclOperation operation) {
-        this(type, resource, host, List.of(operation));
-        this.operation = operation;
-    }
+//    public AclRule(AclRuleType type, AclRuleResource resource, String host, AclOperation operation) {
+//        this(type, resource, host, List.of(operation));
+//        this.operation = operation;
+//    }
 
     public AclRule(AclRuleType type, AclRuleResource resource, String host, List<AclOperation> operations) {
         this.type = type;
@@ -105,6 +105,10 @@ public class AclRule implements UnknownPropertyPreserving, Serializable {
 
     @JsonProperty("operation")
     public void setOperation(AclOperation operation) {
+        if (operation == null) {
+            return;
+        }
+
         this.operation = operation;
         this.operations.add(operation);
     }

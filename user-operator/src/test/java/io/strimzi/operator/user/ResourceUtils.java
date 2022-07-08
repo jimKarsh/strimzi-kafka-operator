@@ -214,7 +214,7 @@ public class ResourceUtils {
 
             if (adapted.getAcls() != null) {
                 for (AclRule rule : adapted.getAcls()) {
-                    simpleAclRules.add(SimpleAclRule.fromCrd(rule));
+                    simpleAclRules.addAll(SimpleAclRule.fromCrd(rule));
                 }
             }
         }
